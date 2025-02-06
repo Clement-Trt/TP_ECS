@@ -91,9 +91,21 @@ void TRANSFORM::Rotate(float pitch, float yaw, float roll)
 
 void TRANSFORM::Move(float frontDir, float rightDir, float upDir)
 {
-	vPosition.z = frontDir;
-	vPosition.x = rightDir;
-	vPosition.y = upDir;
+	vPosition.z += frontDir * vDirection.z;
+	vPosition.x += frontDir * vDirection.x;
+	vPosition.y += frontDir * vDirection.y;
+
+	// Déplacement selon le vecteur vRight (droite/gauche)
+	vPosition.z += rightDir * vRight.z;
+	vPosition.x += rightDir * vRight.x;
+	vPosition.y += rightDir * vRight.y;
+
+	// Déplacement selon le vecteur vUp (haut/bas)
+	vPosition.z += upDir * vUp.z;
+	vPosition.x += upDir * vUp.x;
+	vPosition.y += upDir * vUp.y;
+
+	Update();
 }
 
 float TRANSFORM::GetPositionX()

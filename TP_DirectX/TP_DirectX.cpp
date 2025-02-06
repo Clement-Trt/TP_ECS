@@ -35,7 +35,6 @@ int main()
 		entity.AddComponent(newTC);
 	}
 
-
 	for (auto& entity : vecEntity)
 	{
 		std::cout << "Entity " << entity.GetID() << " : \n";

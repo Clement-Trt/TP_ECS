@@ -2,6 +2,11 @@
 #include "Transform.h"
 class Entity;
 
+struct TEST
+{
+	int i;
+};
+
 class Component
 {
 	Entity* m_pEntity;
