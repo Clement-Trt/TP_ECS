@@ -49,15 +49,6 @@ int main()
 
 	ShowWindow(hwnd, SW_SHOW); // Afficher la fenetre
 
-	MSG msg = {};
-	while (msg.message != WM_QUIT)
-	{
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-	}
 
 	// ______________________________________________Activation DEBUG DirectX ___________________________________________________________________________________________________________________________________________
 #ifdef _DEBUG
@@ -196,5 +187,113 @@ int main()
 		rtvHandle.Offset(1, rtvDescriptorSize);
 	}
 
+	// ______________________________________________Creation Command Allocator et de la Command List ____________________________________________________________________________________________________________________________________________________
 
+
+	//									********************************* Command Allocator *********************************
+	// Création du command allocator
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator;
+	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
+	if (FAILED(hr))
+	{
+		return -1;
+	}
+
+	// Création de la command list
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
+	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList));
+	if (FAILED(hr))
+	{
+		return -1;
+	}
+	// On ferme la command list pour le moment
+	commandList->Close();
+
+	//									********************************* Fence *********************************
+
+	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+	UINT64 fenceValue = 0;
+	hr = device->CreateFence(fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
+	if (FAILED(hr))
+	{
+		return -1;
+	}
+
+	// Création d'un événement Windows pour la synchronisation
+	HANDLE fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+	if (fenceEvent == nullptr)
+	{
+		return -1;
+	}
+
+	UINT frameIndex = swapChain->GetCurrentBackBufferIndex();
+	FLOAT clearColor[] = { 1.0f, 0.2f, 0.4f, 1.0f };
+	/*UINT*/ rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+	// ______________________________________________Boucle d'affichage ____________________________________________________________________________________________________________________________________________________
+
+
+	MSG msg = {};
+	while (msg.message != WM_QUIT)
+	{
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else
+		{
+			// Réinitialiser le command allocator
+			commandAllocator->Reset();
+
+			// Réinitialiser la command list pour enregistrer de nouvelles commandes
+			commandList->Reset(commandAllocator.Get(), nullptr);
+
+			// Transition du back buffer de PRESENT à RENDER_TARGET
+			D3D12_RESOURCE_BARRIER barrier = {};
+			barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+			barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+			barrier.Transition.pResource = renderTargets[frameIndex].Get();
+			barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+			barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+			barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+			commandList->ResourceBarrier(1, &barrier);
+
+			// Obtenir le handle du RTV pour le buffer courant
+			D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvHeap->GetCPUDescriptorHandleForHeapStart();
+			rtvHandle.ptr += frameIndex * rtvDescriptorSize;
+
+			// Effacer le render target avec la couleur définie
+			commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+
+			// Transition du back buffer de RENDER_TARGET à PRESENT
+			barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+			barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+			commandList->ResourceBarrier(1, &barrier);
+
+			// Fermer la command list
+			commandList->Close();
+
+			// Exécuter la command list
+			ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
+			commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+
+			// Présenter le swap chain
+			swapChain->Present(1, 0);
+
+			// Synchronisation avec le GPU via la fence
+			fenceValue++;  // Incrémentez la valeur de la fence
+			commandQueue->Signal(fence.Get(), fenceValue);
+			if (fence->GetCompletedValue() < fenceValue)
+			{
+				fence->SetEventOnCompletion(fenceValue, fenceEvent);
+				WaitForSingleObject(fenceEvent, INFINITE);
+			}
+
+			// Mettre à jour l'index du back buffer pour le prochain cycle
+			frameIndex = swapChain->GetCurrentBackBufferIndex();
+		}
+	}
+
+	std::cout << "oups\n";
 }
