@@ -1,26 +1,54 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include "Components.h"
+#include"pch.h"
 
-// Ou placer les entity Types ? Dans ECS ? Ou a part ?
+enum EntityTypesEnum
+{
+	BaseType,
 
-namespace EntityTypes {
+	Count
+};
 
-	using EntityID = uint32_t;
 
-	// Archetype pour les entités qui ont Position et Velocity
-	struct PNJs {
-		std::vector<EntityID> entityIDs;
-		std::vector<Components::Transformable> transformables;
 
-		/*std::vector<Components::Position> positions;
-		std::vector<Components::Velocity> velocities;*/
-	};
+struct EntityType 
+{
+private:
+	EntityID nextID = 0;
 
-	// Archetype pour les entités qui ont uniquement Velocity
-	/*struct ArchetypeVelocityOnly {
-		std::vector<EntityID> entityIDs;
-		std::vector<Velocity> velocities;
-	};*/
-}
+	std::vector<EntityID> entityIDs;
+
+	std::vector<Component*> Components; // Contient un exemplaire de chaque component de ce type d'entite
+
+	std::vector<std::vector<Component*>> ComponentsList; // Contient la liste de chaque pack de conteneur des entite
+
+public:
+	void AddEntity();
+	void AddComponent(int componentIndex); // Ajoute le component (a l'index "componentIndex" de la liste de components generale) au vector Components
+
+	EntityID& GetEntityID(int entityIndex) { return entityIDs.at(entityIndex); };
+	std::vector<std::vector<Component*>>& GetComponentList() { return ComponentsList; };
+};
+
+
+
+
+
+
+
+
+
+
+
+	/*std::vector<Components::Position> positions;
+	std::vector<Components::Velocity> velocities;*/
+
+
+// Archetype pour les entités qui ont uniquement Velocity
+/*struct ArchetypeVelocityOnly {
+	std::vector<EntityID> entityIDs;
+	std::vector<Velocity> velocities;
+};*/

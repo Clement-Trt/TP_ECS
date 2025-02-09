@@ -1,41 +1,60 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include "pch.h"
+#include "Transform.h"
 
-namespace Components 
+constexpr uint32_t COMPONENT_TRANSFORM = 1 << 0; // 0x01
+constexpr uint32_t COMPONENT_MESH = 1 << 1; // 0x02
+constexpr uint32_t COMPONENT_POSITION = (1 << 1) + (1 << 0); // 0x03
+constexpr uint32_t COMPONENT_VELOCITY = (1 << 2); // 0x04
+constexpr uint32_t COMPONENT_HEALTH = (1 << 2) + (1 << 0); // 0x05
+
+class Component
 {
-	struct Position {
-		float x, y;
-	};
-
-	struct Velocity {
-		float vx, vy;
-	};
+	EntityID m_EntityID;
 
 
-	struct Transformable
-	{
-		DirectX::XMFLOAT3 vScale;
+	void SetEntity(EntityID* owner);
+	virtual int GetID() = 0;
 
-		DirectX::XMFLOAT3 vDirection;
-		DirectX::XMFLOAT3 vRight;
-		DirectX::XMFLOAT3 vUp;
-		DirectX::XMFLOAT4 qRotation;
-		DirectX::XMFLOAT4X4 mRotation;
+};
 
-		DirectX::XMFLOAT3 vPosition;
 
-		DirectX::XMFLOAT4X4 matrix;
 
-		// Velocite pas censée etre geree ici ? est-ce que c'est pcq la gestion des mouvements se ferait dans un update exterieur
-		// => gestion de la velocité avec fonction move ? Definition : position = vitesse * vecteur direction
+class MeshComponent : public Component
+{
+	static const int ID = 1;
 
-		// Faut il garder ça dans la struct pour pouvoir l'initialiser à la construction ?
+	int GetID() override { return ID; };
+};
 
-	/*public:
-		TRANSFORM() { Identity(); };
+class TransformComponent : public Component
+{
+	TRANSFORM m_transform;
+	static const int ID = 2;
 
-		void Identity();*/
-	};
-}
+	void Move(float frontDir, float rightDir, float upDir);
+	void GetPosition();
 
+	int GetID() override { return ID; };
+};
+
+
+//_________________________________TEST ____________________________________
+
+struct Position : public Component
+{
+	static const int ID = 3;
+	float x, y;
+
+	int GetID() override { return ID; };
+};
+
+struct Velocity : public Component
+{
+	static const int ID = 4;
+	float vx, vy;
+
+	int GetID() override { return ID; };
+};
