@@ -24,4 +24,8 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="TriangleVS.hlsl" />
+    <FxCompile Include="TrianglePS.hlsl" />
+  </ItemGroup>
 </Project>
