@@ -128,16 +128,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Components.cpp" />
-    <ClCompile Include="ECS.cpp" />
     <ClCompile Include="ECS_TEST.cpp" />
-    <ClCompile Include="EntityTypes.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="Movement.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components.h" />
-    <ClInclude Include="ECS.h" />
-    <ClInclude Include="EntityTypes.h" />
-    <ClInclude Include="pch.h" />
+    <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="Movement.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

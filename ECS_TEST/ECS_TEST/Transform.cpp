@@ -95,12 +95,12 @@ void TRANSFORM::Move(float frontDir, float rightDir, float upDir)
 	vPosition.x += frontDir * vDirection.x;
 	vPosition.y += frontDir * vDirection.y;
 
-	// Déplacement selon le vecteur vRight (droite/gauche)
+	// Deplacement selon le vecteur vRight (droite/gauche)
 	vPosition.z += rightDir * vRight.z;
 	vPosition.x += rightDir * vRight.x;
 	vPosition.y += rightDir * vRight.y;
 
-	// Déplacement selon le vecteur vUp (haut/bas)
+	// Deplacement selon le vecteur vUp (haut/bas)
 	vPosition.z += upDir * vUp.z;
 	vPosition.x += upDir * vUp.x;
 	vPosition.y += upDir * vUp.y;
