@@ -5,26 +5,26 @@
 
 class Component
 {
-	//EntityID m_EntityID;
-
-
-	//void SetEntity(EntityID* owner);
-	//virtual int GetID() = 0;
 
 };
-
-
 
 class MeshComponent : public Component
 {
 };
 
-class TransformComponent : public Component
+
+//class PositionComponent : public Component
+//{
+	// /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\  ---   Pourrait etre utilise pour optimiser l'utilisation : pas besoin du Transform entier tout le temps je pense ?   ---   /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
+};
+
+
+struct TransformComponent : public Component
 {
 	TRANSFORM m_transform;	
 };
 
-struct Velocity : public Component
+struct VelocityComponent : public Component
 {
 	float vx, vy;
 };

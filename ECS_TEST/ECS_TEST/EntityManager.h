@@ -11,12 +11,23 @@ enum ComponentType {
 	COMPONENT_NONE = 0,
 	COMPONENT_TRANSFORM = 1 << 0,
 	COMPONENT_MESH = 1 << 1,
-
 	COMPONENT_VELOCITY = 1 << 2,
 	COMPONENT_HEALTH = 1 << 3,
-	COMPONENT_HEAL = 1 << 4
+
+	COMPONENT_HEAL = 1 << 4,		// A changer
+
+	TOTALCOMPONENT
 };
 
+enum ComponentIndex
+{
+	Transform_index,
+	Mesh_index,
+	Velocity_index,
+	Health_index,
+
+	Heal_index		// A changer
+};
 
 class Entity
 {
@@ -27,8 +38,10 @@ public:
 
 struct EntityComponents
 {
+	uint32_t tab_index = 0;
 	ComponentMask mask = 0;
-	std::vector<Component*> components = { nullptr };
+	std::vector<Component*> components;
+	Component* tab_components[TOTALCOMPONENT] = { nullptr };
 };
 
 
@@ -39,11 +52,11 @@ public:
 	/*std::unordered_map<Entity, ComponentMask>& GetEntityMap() {
 		return entityComponents;
 	}*/
-	Entity*(&GetEntityTab())[64000]
+	Entity*(&GetEntityTab())[10000]
 	{
 		return tab_entity;
 	}
-	EntityComponents*(&GetComponentsTab())[64000]
+	EntityComponents*(&GetComponentsTab())[10000]
 	{
 		return tab_CompEntities;
 	}
@@ -52,6 +65,7 @@ public:
 	Entity* CreateEntity();
 
 	// Detruit une entite (supprime sa signature de composants)
+	void ToDestroy(Entity* entity);
 	void DestroyEntity(Entity* entity);
 
 	// Ajoute un composant a une entite (en "ou"-ant le bit)
@@ -67,9 +81,13 @@ private:
 	//Entity nextEntity = 1;
 	uint32_t entityNb = 0;
 	// Stocke pour chaque entite son bitmask de composants
-	std::unordered_map<Entity, ComponentMask> entityComponents;
+	//std::unordered_map<Entity, ComponentMask> entityComponents;
 
-	EntityComponents* tab_CompEntities[64000] = { nullptr };
+	EntityComponents* tab_CompEntities[10000] = { nullptr };
 
-	Entity* tab_entity[64000] = { nullptr }; // 0 = pas d'entite   ---   1+ = entite ===> /!\ la premiere entite a l'index 1 /!\.
+	Entity* tab_entity[10000] = { nullptr }; // 0 = pas d'entite   ---   1+ = entite ===> /!\ la premiere entite a l'index 1 /!\.
+
+	//bool tab_todestroy[10000] = { false };
+	//std::vector<bool> tab_todestroy = { false };
+	std::vector<Entity*> tab_todestroy = { nullptr };
 };

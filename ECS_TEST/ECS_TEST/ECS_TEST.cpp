@@ -6,86 +6,84 @@
 int main() {
 
 	EntityManager EM;
-	Movement movementManager;
+	MovementManager movementManager;
 
-	// Stockage des donnees des composants dans des maps
-	//std::unordered_map<Entity, Velocity> velocities;
-	//std::unordered_map<Entity, TRANSFORM> transforms;
-
-
-
-	// Creation d'une entite
+	
 	Entity* entity1 = EM.CreateEntity();
 	Entity* entity2 = EM.CreateEntity();
 	Entity* entity3 = EM.CreateEntity();
+	Entity* entity4 = EM.CreateEntity();
 
-	// Ajout du composant Position a l'entite
 
-	// Ajout du composant Velocity a l'entite
+	std::cout << "Je suis la" << std::endl;
 	EM.AddComponent(entity1, COMPONENT_VELOCITY);
-	EM.GetComponentsTab()[entity1->tab_index]->components
-
-	velocities[entity1] = { 1.0f, 1.5f };
-
-	// Ajout du composant Velocity a l'entite
+	VelocityComponent* vc = static_cast<VelocityComponent*>(EM.GetComponentsTab()[entity1->tab_index]->tab_components[Velocity_index]);
+	vc->vx = 1.0f;
+	vc->vy = 1.5f;
 	EM.AddComponent(entity1, COMPONENT_TRANSFORM);
 
-	// Ajout du composant Velocity a l'entite
+
+
 	EM.AddComponent(entity2, COMPONENT_VELOCITY);
-	velocities[entity2] = { 2.0f, 2.5f };
-
-	// Ajout du composant Velocity a l'entite
+	vc = static_cast<VelocityComponent*>(EM.GetComponentsTab()[entity2->tab_index]->tab_components[Velocity_index]);
+	vc->vx = 2.0f;
+	vc->vy = 2.5f;
 	EM.AddComponent(entity2, COMPONENT_TRANSFORM);
-	
-	// Ajout du composant Velocity a l'entite
-	EM.AddComponent(entity3, COMPONENT_VELOCITY);
-	velocities[entity3] = { 5.0f, 5.0f };
 
-	// Ajout du composant Velocity a l'entite
+
+
+	EM.AddComponent(entity3, COMPONENT_VELOCITY);
+	vc = static_cast<VelocityComponent*>(EM.GetComponentsTab()[entity3->tab_index]->tab_components[Velocity_index]);
+	vc->vx = 5.0f;
+	vc->vy = 5.5f;
 	EM.AddComponent(entity3, COMPONENT_TRANSFORM);
 
-	int indexToDestroy = 1; // Pour gerer la destruction des entites dans le tableau de facon optimisee
-	for (auto entity : EM.GetEntityTab())
-	{
-		std::cout << "BOB : "<< std::endl;
-		if (entity == 0)
+
+	EM.AddComponent(entity4, COMPONENT_VELOCITY);
+	vc = static_cast<VelocityComponent*>(EM.GetComponentsTab()[entity4->tab_index]->tab_components[Velocity_index]);
+	vc->vx = 7.0f;
+	vc->vy = 7.5f;
+	EM.AddComponent(entity4, COMPONENT_TRANSFORM);
+	std::cout << "vc.vx : " << vc->vx << "vc.vy : " << vc->vy << std::endl;
+
+
+		int indexToDestroy = 1; // Pour gerer la destruction des entites dans le tableau de facon optimisee
+		for (auto entity : EM.GetEntityTab())
 		{
-			break; // break correct ici ?
+			if (entity == nullptr)
+			{
+				break;
+			}
+
+
+			TransformComponent* transform = static_cast<TransformComponent*>(EM.GetComponentsTab()[entity->tab_index]->tab_components[Transform_index]);
+			MeshComponent* mesh = static_cast<MeshComponent*>(EM.GetComponentsTab()[entity->tab_index]->tab_components[Mesh_index]);
+			VelocityComponent* velocity = static_cast<VelocityComponent*>(EM.GetComponentsTab()[entity->tab_index]->tab_components[Velocity_index]);
+
+			std::cout << "\n ------------------------------------------------------------------------------------------- \n";
+			std::cout << "Entite " << entity->id << " position d'origine : ("
+				<< transform->m_transform.GetPositionX() << ", " << transform->m_transform.GetPositionY() << ")\n";
+
+
+			if (EM.HasComponent(entity, COMPONENT_TRANSFORM | COMPONENT_VELOCITY)) {
+
+				transform->m_transform.Move(0, velocity->vx, velocity->vy);
+
+				std::cout << "Entite " << entity->id << " nouvelle position: ("
+					<< transform->m_transform.GetPositionX() << ", " << transform->m_transform.GetPositionY() << ") avec : vx = " << velocity->vx << " et vy = " << velocity->vy << std::endl;
+			}
+			std::cout << "\n ------------------------------------------------------------------------------------------- \n";
+
 		}
-		std::cout << "\n ------------------------------------------------------------------------------------------- \n";
-		std::cout << "Entite " << entity << " position d'origine : ("
-			<< transforms[entity].GetPositionX() << ", " << transforms[entity].GetPositionY() << ")\n";
 
-		// Systeme de mise a jour : pour chaque entite possedant Transform,
-		// on met a jour sa position en fonction de sa velocite.
-		//if (EM.HasComponent(entity, COMPONENT_TRANSFORM) && EM.HasComponent(entity, COMPONENT_VELOCITY)) {
-		if (EM.HasComponent(entity, COMPONENT_TRANSFORM|COMPONENT_VELOCITY)) {
-
-			TRANSFORM& transfo = transforms[entity];
-			Velocity& vel = velocities[entity];
-
-			// Mise a jour de la position
-			transfo.Move(0, vel.vx, vel.vy);
-
-			std::cout << "Entite " << entity << " nouvelle position: ("
-				<< transforms[entity].GetPositionX() << ", " << transforms[entity].GetPositionY() << ")\n";
-		}
-		std::cout << "\n ------------------------------------------------------------------------------------------- \n";
-
-		if (entity == entity2)
-			EM.DestroyEntity(entity, indexToDestroy);
-
-	}
-
-	for (auto entity : EM.GetEntityTab())
-	{
-		if (entity == 0)
+		for (auto entity : EM.GetEntityTab())
 		{
-			break; // break correct ici ?
+			if (entity == nullptr)
+			{
+				break;
+			}
+			std::cout << "\n\n ------------------------------------------------------------------------------------------- \n";
+			std::cout << "Entity : " << entity->id << std::endl;
 		}
-		std::cout << "\n\n ------------------------------------------------------------------------------------------- \n";
-		std::cout << "Entity : " << entity << std::endl;
-	}
-
 	return 0;
 }

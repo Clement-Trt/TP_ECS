@@ -1,8 +1,8 @@
 #pragma once
 
-class Movement
+class MovementManager
 {
 public:
-	void Move();
+	void SetVelocity();
 };
 
