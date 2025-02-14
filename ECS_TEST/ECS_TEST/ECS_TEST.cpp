@@ -9,19 +9,22 @@ int main() {
 	Movement movementManager;
 
 	// Stockage des donnees des composants dans des maps
-	std::unordered_map<Entity, Velocity> velocities;
-	std::unordered_map<Entity, TRANSFORM> transforms;
+	//std::unordered_map<Entity, Velocity> velocities;
+	//std::unordered_map<Entity, TRANSFORM> transforms;
+
 
 
 	// Creation d'une entite
-	Entity entity1 = EM.CreateEntity();
-	Entity entity2 = EM.CreateEntity();
-	Entity entity3 = EM.CreateEntity();
+	Entity* entity1 = EM.CreateEntity();
+	Entity* entity2 = EM.CreateEntity();
+	Entity* entity3 = EM.CreateEntity();
 
 	// Ajout du composant Position a l'entite
 
 	// Ajout du composant Velocity a l'entite
 	EM.AddComponent(entity1, COMPONENT_VELOCITY);
+	EM.GetComponentsTab()[entity1->tab_index]->components
+
 	velocities[entity1] = { 1.0f, 1.5f };
 
 	// Ajout du composant Velocity a l'entite
@@ -55,7 +58,8 @@ int main() {
 
 		// Systeme de mise a jour : pour chaque entite possedant Transform,
 		// on met a jour sa position en fonction de sa velocite.
-		if (EM.HasComponent(entity, COMPONENT_TRANSFORM) && EM.HasComponent(entity, COMPONENT_VELOCITY)) {
+		//if (EM.HasComponent(entity, COMPONENT_TRANSFORM) && EM.HasComponent(entity, COMPONENT_VELOCITY)) {
+		if (EM.HasComponent(entity, COMPONENT_TRANSFORM|COMPONENT_VELOCITY)) {
 
 			TRANSFORM& transfo = transforms[entity];
 			Velocity& vel = velocities[entity];

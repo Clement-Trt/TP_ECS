@@ -3,28 +3,28 @@
 #include <DirectXMath.h>
 #include "Transform.h"
 
-//class Component
-//{
-//	EntityID m_EntityID;
-//
-//
-//	//void SetEntity(EntityID* owner);
-//	virtual int GetID() = 0;
-//
-//};
+class Component
+{
+	//EntityID m_EntityID;
+
+
+	//void SetEntity(EntityID* owner);
+	//virtual int GetID() = 0;
+
+};
 
 
 
-class MeshComponent
+class MeshComponent : public Component
 {
 };
 
-class TransformComponent
+class TransformComponent : public Component
 {
 	TRANSFORM m_transform;	
 };
 
-struct Velocity 
+struct Velocity : public Component
 {
 	float vx, vy;
 };
