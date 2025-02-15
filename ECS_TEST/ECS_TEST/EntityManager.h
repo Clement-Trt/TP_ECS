@@ -1,10 +1,8 @@
 #pragma once
 
-#include <unordered_map>
 #include <vector>
 #include "Components.h"
 
-//using Entity = uint32_t;
 using ComponentMask = uint32_t;
 
 enum ComponentType {
@@ -49,9 +47,6 @@ class EntityManager
 {
 public:
 
-	/*std::unordered_map<Entity, ComponentMask>& GetEntityMap() {
-		return entityComponents;
-	}*/
 	Entity*(&GetEntityTab())[64000] { return tab_entity; }
 
 	EntityComponents*(&GetComponentsTab())[64000] {	return tab_CompEntities; }
