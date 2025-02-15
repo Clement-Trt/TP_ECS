@@ -52,42 +52,39 @@ public:
 	/*std::unordered_map<Entity, ComponentMask>& GetEntityMap() {
 		return entityComponents;
 	}*/
-	Entity*(&GetEntityTab())[10000]
-	{
-		return tab_entity;
-	}
-	EntityComponents*(&GetComponentsTab())[10000]
-	{
-		return tab_CompEntities;
-	}
+	Entity*(&GetEntityTab())[64000] { return tab_entity; }
+
+	EntityComponents*(&GetComponentsTab())[64000] {	return tab_CompEntities; }
+
+	std::vector<Entity*> GetToDestroyTab() { return tab_toDestroy; }
+
+	uint32_t GetNbEntity() { return entityNb; }
 
 	// Cree une entite et retourne son ID
 	Entity* CreateEntity();
 
 	// Detruit une entite (supprime sa signature de composants)
 	void ToDestroy(Entity* entity);
-	void DestroyEntity(Entity* entity);
+	int DestroyEntity(Entity* entity);
 
 	// Ajoute un composant a une entite (en "ou"-ant le bit)
 	void AddComponent(Entity* entity, ComponentMask component);
 
 	// Retire un composant a une entite (en effaçant le bit)
-	void RemoveComponent(Entity* entity, ComponentMask component);
+	void RemoveComponent(Entity* entity, ComponentMask componentMask);
 
 	// Verifie si l'entite possede le(s) composant(s) indique(s)
 	bool HasComponent(Entity* entity, ComponentMask component) const;
 
 private:
-	//Entity nextEntity = 1;
 	uint32_t entityNb = 0;
-	// Stocke pour chaque entite son bitmask de composants
-	//std::unordered_map<Entity, ComponentMask> entityComponents;
 
-	EntityComponents* tab_CompEntities[10000] = { nullptr };
+	EntityComponents* tab_CompEntities[64000] = { nullptr };
 
-	Entity* tab_entity[10000] = { nullptr }; // 0 = pas d'entite   ---   1+ = entite ===> /!\ la premiere entite a l'index 1 /!\.
+	Entity* tab_entity[64000] = { nullptr };
 
 	//bool tab_todestroy[10000] = { false };
 	//std::vector<bool> tab_todestroy = { false };
-	std::vector<Entity*> tab_todestroy = { nullptr };
+	std::vector<Entity*> tab_toDestroy = { nullptr };
+	std::vector<Entity*> tab_toAdd = { nullptr };
 };
