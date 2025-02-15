@@ -1,10 +1,37 @@
 #include <iostream>
-#include "EntityManager.h"
+//#include "EntityManager.h"
+#include "GameManager.h"
+#include "Scene.h"
 #include "Movement.h"
 
 
 int main() {
 
+	GameManager* GM = new GameManager;
+
+	Scene* scene = new Scene;
+
+	GM->Initialize();
+
+	GM->SetScene(scene);
+	scene->SetGameManager(GM);
+
+	GM->Run();
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// SCENE
+/*
 	EntityManager* EM = new EntityManager();				 //			/!\/!\/!\/!\ A METTRE DANS GAME MANAGER /!\/!\/!\/!\/
 	//MovementManager movementManager; //			/!\/!\/!\/!\ A METTRE DANS GAME MANAGER /!\/!\/!\/!\/
 
@@ -80,8 +107,8 @@ int main() {
 
 			if (test == 0 && entity == entity3)
 			{
-				EM->DestroyEntity(entity);
-				entity4 = EM->GetEntityTab()[entity->tab_index]; //			/!\/!\/!\/!\ A METTRE DANS GAME MANAGER /!\/!\/!\/!\/
+				EM->DestroyEntity(entity);//						/!\/!\/!\/!\ A METTRE DANS GAME MANAGER /!\/!\/!\/!\/
+				entity4 = EM->GetEntityTab()[entity->tab_index]; 
 				entity = EM->GetEntityTab()[EM->GetNbEntity() - 1];
 			}
 		}
@@ -98,5 +125,12 @@ int main() {
 	}
 
 	// ICI :  			/!\/!\/!\/!\ A METTRE DANS SCENE /!\/!\/!\/!\/
+
+	delete EM;
+	delete entity1;
+	delete entity2;
+	delete entity3;
+	//delete entity4; // Deja delete
+	delete vc;*/
 	return 0;
 }

@@ -14,7 +14,7 @@ enum ComponentType {
 	COMPONENT_VELOCITY = 1 << 2,
 	COMPONENT_HEALTH = 1 << 3,
 
-	COMPONENT_HEAL = 1 << 4,		// A changer
+	COMPONENT_HEAL = 1 << 4,		// Exemple
 
 	TOTALCOMPONENT
 };
@@ -26,13 +26,13 @@ enum ComponentIndex
 	Velocity_index,
 	Health_index,
 
-	Heal_index		// A changer
+	Heal_index		// Exemple
 };
 
 class Entity
 {
 public:
-	uint32_t id = 0;
+	int32_t id = 0;
 	uint32_t tab_index = 0;
 };
 
@@ -56,7 +56,9 @@ public:
 
 	EntityComponents*(&GetComponentsTab())[64000] {	return tab_CompEntities; }
 
-	std::vector<Entity*> GetToDestroyTab() { return tab_toDestroy; }
+	std::vector<Entity*>& GetToDestroyTab() { return tab_toDestroy; }
+	std::vector<Entity*>& GetEntityToAddTab() { return tab_entitiesToAdd; }
+	std::vector<EntityComponents*>& GetComponentToAddTab() { return tab_compToAdd; }
 
 	uint32_t GetNbEntity() { return entityNb; }
 
@@ -76,8 +78,12 @@ public:
 	// Verifie si l'entite possede le(s) composant(s) indique(s)
 	bool HasComponent(Entity* entity, ComponentMask component) const;
 
+	void AddEntityToTab(Entity* entity, EntityComponents* components);
+	void ResetEntitiesToAdd() { entitiesToAddIndex = 0; }
 private:
-	uint32_t entityNb = 0;
+
+	uint32_t entityNb = 0; // Positif, ce sont les entity qui existent actuellement dans le jeu
+	int32_t entitiesToAddIndex = 0; // Negatif pour savoir qu'elles ne sont pas encore ajoutées mais comme uint32_t peut pas etre neg => tres grand nombre
 
 	EntityComponents* tab_CompEntities[64000] = { nullptr };
 
@@ -85,6 +91,7 @@ private:
 
 	//bool tab_todestroy[10000] = { false };
 	//std::vector<bool> tab_todestroy = { false };
-	std::vector<Entity*> tab_toDestroy = { nullptr };
-	std::vector<Entity*> tab_toAdd = { nullptr };
+	std::vector<Entity*> tab_toDestroy;
+	std::vector<Entity*> tab_entitiesToAdd ;
+	std::vector<EntityComponents*> tab_compToAdd ;
 };

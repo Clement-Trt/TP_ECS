@@ -4,19 +4,51 @@
 Entity* EntityManager::CreateEntity() {
 
 	Entity* entity = new Entity;
-	entity->tab_index = entityNb;
-	entity->id = entityNb + 1;
 
-	tab_entity[entity->tab_index] = entity; // Ajout de l'entity dans le tableau d'entities
+	entity->tab_index = entitiesToAddIndex * -1;
+	entity->id = entitiesToAddIndex - 1;
+	tab_entitiesToAdd.push_back(entity);
 
 	EntityComponents* newComponents = new EntityComponents;
 	newComponents->mask = COMPONENT_NONE;
-	newComponents->tab_index = entityNb;
-	tab_CompEntities[entityNb] = newComponents; // Ajout des components (vides) de l'entity dans la case correspondant du tableau de composants
+	newComponents->tab_index = entitiesToAddIndex;
 
-	entityNb++;
+	tab_compToAdd.push_back(newComponents);
+
+	//entity->tab_index = entityNb;
+	//entity->id = entityNb + 1;
+
+	//tab_entity[entity->tab_index] = entity; // Ajout de l'entity dans le tableau d'entities
+
+	//newComponents->mask = COMPONENT_NONE;
+	//newComponents->tab_index = entityNb;
+	//tab_CompEntities[entityNb] = newComponents; // Ajout des components (vides) de l'entity dans la case correspondant du tableau de composants
+
+	entitiesToAddIndex--;
 	return entity;
 }
+
+void EntityManager::AddEntityToTab(Entity* entity, EntityComponents* components)
+{
+	entity->tab_index = entityNb;
+	entity->id = entityNb + 1;
+	tab_entity[entity->tab_index] = entity; // Ajout de l'entity dans le tableau d'entities
+
+	components->tab_index = entityNb;
+	tab_CompEntities[entityNb] = components; // Ajout des components (vides) de l'entity dans la case correspondant du tableau de composants
+
+	entityNb++;
+}
+
+//void EntityManager::AddComponentsToTab(EntityComponents* components)
+//{
+//	components->mask = COMPONENT_NONE;
+//	components->tab_index = entityNb;
+//	tab_CompEntities[entityNb] = components; // Ajout des components (vides) de l'entity dans la case correspondant du tableau de composants
+//
+//	//entityNb++;
+//	//return entity;
+//}
 
 int EntityManager::DestroyEntity(Entity* entity) {
 	int index = entity->tab_index;
@@ -49,46 +81,87 @@ void EntityManager::ToDestroy(Entity* entity)
 }
 
 void EntityManager::AddComponent(Entity* entity, ComponentMask component) {
-	
-	tab_CompEntities[entity->tab_index]->mask |= component;
 
-	switch (component)
+	if (entity->id < 0)
 	{
-	case COMPONENT_TRANSFORM:
+		tab_compToAdd[entity->tab_index]->mask |= component;
+
+		switch (component)
+		{
+		case COMPONENT_TRANSFORM:
+		{
+			TransformComponent* newTransformComp = new TransformComponent;
+			tab_compToAdd[entity->tab_index]->tab_components[Transform_index] = newTransformComp;
+			break;
+		}
+
+		case COMPONENT_MESH:
+		{
+			MeshComponent* newMeshComp = new MeshComponent;
+			tab_compToAdd[entity->tab_index]->tab_components[Mesh_index] = newMeshComp;
+			break;
+		}
+
+		case COMPONENT_VELOCITY:
+		{
+			VelocityComponent* newVelocityComp = new VelocityComponent;
+			tab_compToAdd[entity->tab_index]->tab_components[Velocity_index] = newVelocityComp;
+			break;
+		}
+
+		case COMPONENT_HEALTH:
+			break;
+
+		case COMPONENT_HEAL:
+			break;
+
+		default:
+			break;
+		}
+	}
+	else // id > 0
 	{
-		TransformComponent* newTransformComp = new TransformComponent;
-		tab_CompEntities[entity->tab_index]->tab_components[Transform_index] = newTransformComp;
-		break;
+		tab_CompEntities[entity->tab_index]->mask |= component;
+
+		switch (component)
+		{
+		case COMPONENT_TRANSFORM:
+		{
+			TransformComponent* newTransformComp = new TransformComponent;
+			tab_CompEntities[entity->tab_index]->tab_components[Transform_index] = newTransformComp;
+			break;
+		}
+
+		case COMPONENT_MESH:
+		{
+			MeshComponent* newMeshComp = new MeshComponent;
+			tab_CompEntities[entity->tab_index]->tab_components[Mesh_index] = newMeshComp;
+			break;
+		}
+
+		case COMPONENT_VELOCITY:
+		{
+			VelocityComponent* newVelocityComp = new VelocityComponent;
+			tab_CompEntities[entity->tab_index]->tab_components[Velocity_index] = newVelocityComp;
+			break;
+		}
+
+		case COMPONENT_HEALTH:
+			break;
+
+		case COMPONENT_HEAL:
+			break;
+
+		default:
+			break;
+		}
 	}
 
-	case COMPONENT_MESH:
-	{
-		MeshComponent* newMeshComp = new MeshComponent;
-		tab_CompEntities[entity->tab_index]->tab_components[Mesh_index] = newMeshComp;
-		break;
-	}
-
-	case COMPONENT_VELOCITY:
-	{
-		VelocityComponent* newVelocityComp = new VelocityComponent;
-		tab_CompEntities[entity->tab_index]->tab_components[Velocity_index] = newVelocityComp;
-		break;
-	}
-
-	case COMPONENT_HEALTH:
-		break;
-
-	case COMPONENT_HEAL:
-		break;
-
-	default:
-		break;
-	}
 
 }
 
 void EntityManager::RemoveComponent(Entity* entity, ComponentMask componentMask) {
-	
+
 	tab_CompEntities[entity->tab_index]->mask &= ~componentMask;
 
 	int compIndex = 0;
