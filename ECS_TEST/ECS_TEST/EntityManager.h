@@ -83,14 +83,12 @@ public:
 private:
 
 	uint32_t entityNb = 0; // Positif, ce sont les entity qui existent actuellement dans le jeu
-	int32_t entitiesToAddIndex = 0; // Negatif pour savoir qu'elles ne sont pas encore ajoutées mais comme uint32_t peut pas etre neg => tres grand nombre
+	int32_t entitiesToAddIndex = 0; // Negatif pour savoir qu'elles ne sont pas encore ajoutées 
 
 	EntityComponents* tab_CompEntities[64000] = { nullptr };
 
 	Entity* tab_entity[64000] = { nullptr };
 
-	//bool tab_todestroy[10000] = { false };
-	//std::vector<bool> tab_todestroy = { false };
 	std::vector<Entity*> tab_toDestroy;
 	std::vector<Entity*> tab_entitiesToAdd ;
 	std::vector<EntityComponents*> tab_compToAdd ;
