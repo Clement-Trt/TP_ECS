@@ -3,6 +3,8 @@
 //#include "EntityManager.h"
 
 class EntityManager;
+class Movement;
+
 class Scene;
 
 class GameManager
@@ -10,6 +12,8 @@ class GameManager
 protected:
 
 	EntityManager* mEM;
+	Movement* mMvmt;
+
 	Scene* mScene;
 
 	float mDeltaTime;

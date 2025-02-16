@@ -1,11 +1,14 @@
+#include "GameManager.h"
+
 #include <iostream>
 #include "EntityManager.h"
-#include "GameManager.h"
+#include "Movement.h"
 #include "Scene.h"
 
 void GameManager::Initialize()
 {
 	mEM = new EntityManager();
+	mMvmt = new Movement();
 }
 
 void GameManager::Run()
@@ -25,6 +28,8 @@ void GameManager::Run()
 		//Draw(); // AJOUTER SYSTEME DE DESSIN DIRECTX
 		i++;
 	}
+
+
 }
 
 void GameManager::Update()

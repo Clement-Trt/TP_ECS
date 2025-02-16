@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "GameManager.h"
+#include "Movement.h"
 
 void Scene::Initialize()
 {
@@ -13,34 +14,36 @@ void Scene::Initialize()
 	Entity* entity3 = mpEntityManager->CreateEntity();
 	Entity* entity4 = mpEntityManager->CreateEntity();
 
-	mpEntityManager->AddComponent(entity1, COMPONENT_VELOCITY); 
+	mpEntityManager->AddComponent(entity1, COMPONENT_VELOCITY | COMPONENT_TRANSFORM);
 	VelocityComponent* vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[0]->tab_components[Velocity_index]);
+	
 	vc->vx = 1.0f;
 	vc->vy = 1.5f;
-	mpEntityManager->AddComponent(entity1, COMPONENT_TRANSFORM);
+	//mpEntityManager->AddComponent(entity1, COMPONENT_TRANSFORM);
 
 
 
-	mpEntityManager->AddComponent(entity2, COMPONENT_VELOCITY);
+	mpEntityManager->AddComponent(entity2, COMPONENT_VELOCITY | COMPONENT_TRANSFORM);
 	vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[1]->tab_components[Velocity_index]);
 	vc->vx = 2.0f;
 	vc->vy = 2.5f;
-	mpEntityManager->AddComponent(entity2, COMPONENT_TRANSFORM);
+	//mpEntityManager->AddComponent(entity2, COMPONENT_TRANSFORM);
+	mpEntityManager->RemoveComponent(entity2, COMPONENT_VELOCITY);
 
 
-
-	mpEntityManager->AddComponent(entity3, COMPONENT_VELOCITY);
+	mpEntityManager->AddComponent(entity3, COMPONENT_VELOCITY | COMPONENT_TRANSFORM);
 	vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[2]->tab_components[Velocity_index]);
 	vc->vx = 5.0f;
 	vc->vy = 5.5f;
-	mpEntityManager->AddComponent(entity3, COMPONENT_TRANSFORM);
+	//mpEntityManager->AddComponent(entity3, COMPONENT_TRANSFORM);
 
 
-	mpEntityManager->AddComponent(entity4, COMPONENT_VELOCITY);
+
+	mpEntityManager->AddComponent(entity4, COMPONENT_VELOCITY | COMPONENT_TRANSFORM);
 	vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[3]->tab_components[Velocity_index]);
 	vc->vx = 7.0f;
 	vc->vy = 7.5f;
-	mpEntityManager->AddComponent(entity4, COMPONENT_TRANSFORM);
+	//mpEntityManager->AddComponent(entity4, COMPONENT_TRANSFORM);
 }
 
 void Scene::Update()
@@ -64,7 +67,7 @@ void Scene::Update()
 
 		if (mpEntityManager->HasComponent(entity, COMPONENT_TRANSFORM | COMPONENT_VELOCITY)) {
 
-			transform->m_transform.Move(0, velocity->vx, velocity->vy);
+			transform->m_transform.Move(velocity->vz, velocity->vx, velocity->vy);
 
 			std::cout << "Entite " << entity->id << " nouvelle position: ("
 				<< transform->m_transform.GetPositionX() << ", " << transform->m_transform.GetPositionY() << ") avec : vx = " << velocity->vx << " et vy = " << velocity->vy << std::endl;
@@ -81,4 +84,9 @@ void Scene::Update()
 		std::cout << "\n\n ------------------------------------------------------------------------------------------- \n";
 		std::cout << "Entity : " << entity->id << std::endl;
 	}
+}
+
+void Scene::Close()
+{
+	
 }

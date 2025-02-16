@@ -16,6 +16,8 @@ public:
 
 	void Update();
 
+	void Close();
+
 
 	void SetGameManager(GameManager* pGameManager) { mpGameManager = pGameManager; }
 	friend class GameManager;
