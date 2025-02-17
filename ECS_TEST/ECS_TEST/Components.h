@@ -41,6 +41,10 @@ class MeshComponent : public Component
 	// /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\  ---   Pourrait etre utilise pour optimiser l'utilisation : pas besoin du Transform entier tout le temps je pense ?   ---   /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
 };
 
+struct CameraComponent : public Component
+{
+
+};
 
 struct TransformComponent : public Component
 {

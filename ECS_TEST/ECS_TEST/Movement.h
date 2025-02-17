@@ -23,6 +23,6 @@ public:
 
 	void Initialize(GameManager* gameManager);
 
-	void SetVelocity(Entity* entity, float velZ, float velX, float velY); // ou velFront, velRight, velUp ?
+	void SetVelocity(Entity* entity, float velFront, float velRight, float velUp); 
 };
 

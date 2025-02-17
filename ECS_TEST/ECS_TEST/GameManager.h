@@ -21,7 +21,7 @@ protected:
 public:
 
 	//GameManager();
-	void Initialize();
+	void Initialize(Scene* scene);
 
 	// __ Game loop __ 
 	void Run();

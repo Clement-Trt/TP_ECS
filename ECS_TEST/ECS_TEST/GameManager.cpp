@@ -5,15 +5,16 @@
 #include "Movement.h"
 #include "Scene.h"
 
-void GameManager::Initialize()
+void GameManager::Initialize(Scene* scene)
 {
 	mEM = new EntityManager();
-	//mMvmt = new Movement();
+	SetScene(scene);
+	mScene->Initialize(this);
+	mScene->OnInitialize();
 }
 
 void GameManager::Run()
 {
-	mScene->Initialize();
 
 	int i = 0;
 	//sf::Clock clock; REMPLACER PAR SYSTEME DE TIMER
@@ -39,7 +40,7 @@ void GameManager::Update()
 	if (mEM->GetEntityTab()[0] != nullptr)
 	{
 		// Update
-		mScene->Update();
+		mScene->OnUpdate();
 		
 
 		// COLLISIONS
