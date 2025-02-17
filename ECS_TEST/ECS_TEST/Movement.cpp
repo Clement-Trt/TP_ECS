@@ -1,14 +1,16 @@
 #include "Movement.h"
+#include "GameManager.h"
+//#include "EntityManager.h"
 
-void Movement::Initialize(/*GameManager* gameManager*/)
+void Movement::Initialize(GameManager* gameManager)
 {
-	//mGM = gameManager;
+	mGM = gameManager;
 }
 
-void Movement::SetVelocity(VelocityComponent* vc, float velX, float velY, float velZ)
+void Movement::SetVelocity(Entity* entity, float velX, float velY, float velZ)
 {
-	//VelocityComponent* vc = static_cast<VelocityComponent*>(mEM->GetComponentToAddTab()[0]->tab_components[Velocity_index]);
-	vc->vz = velZ;
-	vc->vx = velX;
-	vc->vy = velY;
+	VelocityComponent* vel = static_cast<VelocityComponent*>(mGM->GetEntityManager()->GetComponentToAddTab()[entity->tab_index]->tab_components[Velocity_index]);
+	vel->vz = velZ;
+	vel->vx = velX;
+	vel->vy = velY;
 }

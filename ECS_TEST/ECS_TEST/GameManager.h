@@ -3,7 +3,7 @@
 //#include "EntityManager.h"
 
 class EntityManager;
-class Movement;
+//class Movement;
 
 class Scene;
 
@@ -12,7 +12,7 @@ class GameManager
 protected:
 
 	EntityManager* mEM;
-	Movement* mMvmt;
+	//Movement* mMvmt;
 
 	Scene* mScene;
 
@@ -32,6 +32,8 @@ public:
 
 	void SetDeltaTime(float deltaTime) { mDeltaTime = deltaTime; }
 	void SetScene(Scene* scene) { mScene = scene; }
+
+	EntityManager* GetEntityManager() { return mEM; }
 
 	friend class Scene;
 };

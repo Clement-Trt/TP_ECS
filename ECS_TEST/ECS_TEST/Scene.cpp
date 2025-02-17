@@ -9,40 +9,48 @@ void Scene::Initialize()
 {
 	mpEntityManager = mpGameManager->mEM;
 
+	mMvmt = new Movement;
+	mMvmt->Initialize(mpGameManager);
+
 	Entity* entity1 = mpEntityManager->CreateEntity();
 	Entity* entity2 = mpEntityManager->CreateEntity();
 	Entity* entity3 = mpEntityManager->CreateEntity();
 	Entity* entity4 = mpEntityManager->CreateEntity();
 
 	mpEntityManager->AddComponent(entity1, COMPONENT_VELOCITY | COMPONENT_TRANSFORM);
-	VelocityComponent* vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[0]->tab_components[Velocity_index]);
+
+	mMvmt->SetVelocity(entity1, 1.0, 1.0, 1.5);
+	/*VelocityComponent* vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[0]->tab_components[Velocity_index]);
 	
 	vc->vx = 1.0f;
-	vc->vy = 1.5f;
+	vc->vy = 1.5f;*/
 	//mpEntityManager->AddComponent(entity1, COMPONENT_TRANSFORM);
 
 
 
 	mpEntityManager->AddComponent(entity2, COMPONENT_VELOCITY | COMPONENT_TRANSFORM);
-	vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[1]->tab_components[Velocity_index]);
+	mMvmt->SetVelocity(entity2, 1.0, 2.0, 2.5);
+	/*vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[1]->tab_components[Velocity_index]);
 	vc->vx = 2.0f;
-	vc->vy = 2.5f;
+	vc->vy = 2.5f;*/
 	//mpEntityManager->AddComponent(entity2, COMPONENT_TRANSFORM);
-	mpEntityManager->RemoveComponent(entity2, COMPONENT_VELOCITY);
+	//mpEntityManager->RemoveComponent(entity2, COMPONENT_VELOCITY);
 
 
 	mpEntityManager->AddComponent(entity3, COMPONENT_VELOCITY | COMPONENT_TRANSFORM);
-	vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[2]->tab_components[Velocity_index]);
+	mMvmt->SetVelocity(entity3, 1.0, 5.0, 5.5);
+	/*vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[2]->tab_components[Velocity_index]);
 	vc->vx = 5.0f;
-	vc->vy = 5.5f;
+	vc->vy = 5.5f;*/
 	//mpEntityManager->AddComponent(entity3, COMPONENT_TRANSFORM);
 
 
 
 	mpEntityManager->AddComponent(entity4, COMPONENT_VELOCITY | COMPONENT_TRANSFORM);
-	vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[3]->tab_components[Velocity_index]);
-	vc->vx = 7.0f;
-	vc->vy = 7.5f;
+	mMvmt->SetVelocity(entity4, 1.0, 7.0, 7.5);
+	//vc = static_cast<VelocityComponent*>(mpEntityManager->GetComponentToAddTab()[3]->tab_components[Velocity_index]);
+	//vc->vx = 7.0f;
+	//vc->vy = 7.5f;
 	//mpEntityManager->AddComponent(entity4, COMPONENT_TRANSFORM);
 }
 

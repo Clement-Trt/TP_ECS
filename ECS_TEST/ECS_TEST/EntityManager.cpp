@@ -70,8 +70,8 @@ int EntityManager::DestroyEntity(Entity* entity) {
 
 	tab_Components[lastIndex] = nullptr;
 	delete tab_Components[lastIndex];
-	int newEntityToPointAt =
-		--entityNb;
+	int newEntityToPointAt = --entityNb;
+
 	return entityNb;
 }
 

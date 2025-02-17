@@ -2,12 +2,15 @@
 
 class GameManager;
 class EntityManager;
+class Movement;
 
 class Scene
 {
 protected:
 	GameManager* mpGameManager;
 	EntityManager* mpEntityManager;
+
+	Movement* mMvmt;
 public:
 
 	//Scene();

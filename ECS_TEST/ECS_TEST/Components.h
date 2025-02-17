@@ -49,5 +49,7 @@ struct TransformComponent : public Component
 
 struct VelocityComponent : public Component
 {
-	float vz, vx, vy;
+	float vz = 0.0f;
+	float vx = 0.0f;
+	float vy = 0.0f;
 };

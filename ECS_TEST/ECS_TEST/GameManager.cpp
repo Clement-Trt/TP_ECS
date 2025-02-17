@@ -8,7 +8,7 @@
 void GameManager::Initialize()
 {
 	mEM = new EntityManager();
-	mMvmt = new Movement();
+	//mMvmt = new Movement();
 }
 
 void GameManager::Run()
@@ -60,6 +60,7 @@ void GameManager::Update()
 		mEM->AddEntityToTab(entityToAdd, mEM->GetComponentToAddTab()[entityToAdd->tab_index]);
 	}
 	mEM->GetEntityToAddTab().clear();
+	mEM->GetComponentToAddTab().clear();
 	mEM->ResetEntitiesToAdd();
 
 }
